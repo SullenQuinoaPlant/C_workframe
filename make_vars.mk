@@ -1,5 +1,5 @@
-NAME = ftprintf
-LIBNAME = libftprintf
+NAME =
+LIBNAME = lib
 
 CALL_DIR := $(shell pwd)
 SRC_DIR	:= $(ROOT)/sources
@@ -13,12 +13,9 @@ OUT_DIR_H := $(LIBS_I)
 include $(SRC_DIR)/targets.mk
 
 CC := gcc
-ifndef ARCH
-	ARCH := ARCH_A
-endif
 CFLAGS_MORE =
 ifndef CFLAGS
-	CFLAGS := -Wall -Wextra -Werror -D $(ARCH)
+	CFLAGS := -Wall -Wextra -Werror
 endif
 CFLAGS += $(CFLAGS_MORE)
 
