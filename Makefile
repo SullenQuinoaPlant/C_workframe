@@ -1,5 +1,6 @@
 .PHONY : def
-def : targets all
+def : targets
+	$(MAKE) all
 
 
 ############
