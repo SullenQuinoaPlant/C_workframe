@@ -57,7 +57,7 @@ cmocka :
 		-o $@\
 		-Wl,-rpath=$$(readlink -e $(LIBS_L))
 
-%.test.o : %.test.c $(UTEST_DIR)/printf_diff.c $(LIBS_L)/libftprintf.a
+%.test.o : %.test.c $(LIBS_L)/$(LIBNAME).a
 	$(CC) $(CFLAGS_UTEST)\
 		-I $(SRC_DIR)\
 		-I $(LIBS_I)\
