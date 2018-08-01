@@ -1,5 +1,5 @@
 NAME =
-LIBNAME = lib
+LIBNAME = lib$(NAME)
 
 CALL_DIR := $(shell pwd)
 SRC_DIR	:= $(ROOT)/sources
