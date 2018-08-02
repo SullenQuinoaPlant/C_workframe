@@ -58,14 +58,10 @@ clean-ft_printf :
 ################
 #MISCELLANEOUS :
 
-.PHONY : c
-c :
-	git commit -a -m i
-
-.PHONY : p
-p :
-	git push
-
 .PHONY : cp
 cp :
 	git commit -a -m i; git push;
+
+.PHONY : grm
+grm :
+	git reset --hard && make CFLAGS_MORE=-g
