@@ -1,13 +1,12 @@
 NAME =
 LIBNAME = lib$(NAME)
-GIT_REPO =
 
 CALL_DIR := $(shell pwd)
-SRC_DIR	:= $(ROOT)/sources
-OBJ_DIR := $(ROOT)/objects
-LIB_DIR := $(ROOT)/libs
-LIBS_L := $(LIB_DIR)/objects
-LIBS_I := $(LIB_DIR)/includes
+SRC_DIR	:= $(ROOT)/
+OBJ_DIR := $(ROOT)/
+LIB_DIR := $(ROOT)/
+LIBS_L := $(LIB_DIR)/
+LIBS_I := $(LIB_DIR)/
 OUT_DIR_LIB := $(LIBS_L)
 OUT_DIR_H := $(LIBS_I)
 
@@ -19,6 +18,3 @@ ifndef CFLAGS
 	CFLAGS := -Wall -Wextra -Werror
 endif
 CFLAGS += $(CFLAGS_MORE)
-
-UTEST_DIR := $(ROOT)/unit-tests
-DEBUG_DIR := $(ROOT)/debug
