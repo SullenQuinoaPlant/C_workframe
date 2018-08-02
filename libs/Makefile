@@ -3,13 +3,8 @@ ifndef ROOT
 	include $(ROOT)/make_vars.mk
 endif
 
-BUILD_DIR = winterwindswouldwindwistfullywhencewantonwhorshipperswailed
 
-build_dir :
-	if [ -d $(BUILD_DIR) ];then exit 1; fi
-
-
-libft : | build_dir
+libft :
 	git clone \
 		--single-branch \
 		-b the_lib https://github.com/SullenQuinoaPlant/Libft.git \
