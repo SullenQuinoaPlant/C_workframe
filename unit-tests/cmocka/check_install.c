@@ -1,4 +1,3 @@
-#include <stdio.h>
 #define HOW_MANY_TESTS 10
 #include "my_overlay.h"
 

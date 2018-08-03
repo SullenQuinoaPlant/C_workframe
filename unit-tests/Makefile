@@ -5,7 +5,6 @@ endif
 
 TEST_SRCS := $(wildcard $(UTEST_DIR)/*.test.c)
 TEST_OBJS := $(TEST_SRCS:.c=.o)
-#BUILD_STAMPS := $(TEST_OBJS:.o=.build.stamp)
 EXECUTION_STAMPS := $(TEST_OBJS:.o=.execution.stamp)
 
 CFLAGS_UTEST = -fno-builtin -g
@@ -37,9 +36,6 @@ cmocka :
 	else\
 		echo "installing cmocka";\
 		$(MAKE) -C $(UTEST_DIR)/cmocka/;\
-		mv $(UTEST_DIR)/cmocka/libcmocka* $(LIBS_L)/;\
-		mv $(UTEST_DIR)/cmocka/cmocka.h $(LIBS_I)/;\
-		echo "cmocka installed";\
 	fi
 	-@rm ./test.o
 
@@ -48,23 +44,21 @@ cmocka :
 	$(CC) $(CFLAGS_UTEST)\
 		-I $(LIBS_I) -I $(SRC_DIR)\
 		-D main=testee_main\
-		-D $(ARCH)\
 		-include $(SRC_DIR)/$*.c\
 		$<\
 		-L $(LIBS_L)\
-		-lcmocka -lft\
-		-lm\
+		-lcmocka -lft -lmyfloatingpoint\
 		-o $@\
 		-Wl,-rpath=$$(readlink -e $(LIBS_L))
 
-%.test.o : %.test.c $(LIBS_L)/$(LIBNAME).a
+%.test.o : %.test.c $(UTEST_DIR)/printf_diff.c $(LIBS_L)/libftprintf.a
 	$(CC) $(CFLAGS_UTEST)\
 		-I $(SRC_DIR)\
 		-I $(LIBS_I)\
 		-D $(ARCH)\
 		$<\
 		-L $(LIBS_L)\
-		-l$(NAME)\
+		-l $(LIBNAME).a\
 		-lcmocka -lft\
 		-lm\
 		-o $@\
