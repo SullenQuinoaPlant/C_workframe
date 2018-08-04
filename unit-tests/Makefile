@@ -12,23 +12,32 @@ CFLAGS_UTEST += $(CFLAGS_MORE) #$(CFLAGS) were annoying the hell out of me
 
 
 
-
 ############
 #BUILD TESTS
 
 .PHONY : build_tests
-build_tests : set_utest_flags def cmocka $(TEST_OBJS)
+build_tests\
+:\
+set_utest_flags def\
+test_prerequisites\
+$(TEST_OBJS)
+
 
 .PHONY : set_utest_flags
 set_utest_flags :
 	$(eval CFLAGS += $(CFLAGS_UTEST))
+
+
+.PHONY : test_prerequisites
+test_prerequisites : cmocka $(UTEST_DIR)/math_ref.so
+
 
 .PHONY : cmocka
 cmocka : 
 	@if $(CC) $(CFLAGS_UTEST)\
 		-I $(LIBS_I) -L $(LIBS_L)\
 	 	$(UTEST_DIR)/cmocka/check_install.c\
-		 -lcmocka -o test.o\
+		-lcmocka -o test.o\
 		-Wl,-rpath=$$(readlink -e $(LIBS_L))\
 		&& ./test.o .;\
 	then\
@@ -39,35 +48,33 @@ cmocka :
 	fi
 	-@rm ./test.o
 
-%.test.o $(UTEST_DIR)/%.test.o : $(UTEST_DIR)/%.test.c $(SRC_DIR)/%.c
-	echo "$(LIBS_I)"
+
+$(UTEST_DIR)/math_ref.so\
+:\
+$(UTEST_DIR)/math_ref.c
+	gcc -c -fPIC $< -o tmp.o &&\
+	gcc -shared -o $@ tmp.o -lm
+	-rm tmp.o
+
+
+$(UTEST_DIR)/%.test.o\
+:\
+$(UTEST_DIR)/%.test.c\
+$(LIBS_L)/$(LIBNAME).a
 	$(CC) $(CFLAGS_UTEST)\
 		-I $(LIBS_I) -I $(SRC_DIR)\
-		-D main=testee_main\
-		-include $(SRC_DIR)/$*.c\
 		$<\
 		-L $(LIBS_L)\
-		-lcmocka -lft -lmyfloatingpoint\
+		-lcmocka\
+		-l$(NAME) -lmyfloatingpoint -lft\
+		$(UTEST_DIR)/math_ref.so\
 		-o $@\
-		-Wl,-rpath=$$(readlink -e $(LIBS_L))
+		-Wl,-rpath=$$(readlink -e $(LIBS_L))\
+		-Wl,-rpath=$(UTEST_DIR)
 
-%.test.o : %.test.c $(UTEST_DIR)/printf_diff.c $(LIBS_L)/libftprintf.a
-	$(CC) $(CFLAGS_UTEST)\
-		-I $(SRC_DIR)\
-		-I $(LIBS_I)\
-		-D $(ARCH)\
-		$<\
-		-L $(LIBS_L)\
-		-l $(LIBNAME).a\
-		-lcmocka -lft\
-		-lm\
-		-o $@\
-		-Wl,-rpath=$$(readlink -e $(LIBS_L))
 
 %.test.c : $(UTEST_DIR)/cmocka/my_macro_overlay.h
 	@:
-
-
 
 
 
