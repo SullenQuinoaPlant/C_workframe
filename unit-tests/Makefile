@@ -29,7 +29,7 @@ set_utest_flags :
 
 
 .PHONY : test_prerequisites
-test_prerequisites : cmocka $(UTEST_DIR)/math_ref.so
+test_prerequisites : cmocka
 
 
 .PHONY : cmocka
@@ -49,14 +49,6 @@ cmocka :
 	-@rm ./test.o
 
 
-$(UTEST_DIR)/math_ref.so\
-:\
-$(UTEST_DIR)/math_ref.c
-	gcc -c -fPIC $< -o tmp.o &&\
-	gcc -shared -o $@ tmp.o -lm
-	-rm tmp.o
-
-
 $(UTEST_DIR)/%.test.o\
 :\
 $(UTEST_DIR)/%.test.c\
@@ -67,10 +59,8 @@ $(LIBS_L)/$(LIBNAME).a
 		-L $(LIBS_L)\
 		-lcmocka\
 		-l$(NAME) -lmyfloatingpoint -lft\
-		$(UTEST_DIR)/math_ref.so\
 		-o $@\
 		-Wl,-rpath=$$(readlink -e $(LIBS_L))\
-		-Wl,-rpath=$(UTEST_DIR)
 
 
 %.test.c : $(UTEST_DIR)/cmocka/my_macro_overlay.h

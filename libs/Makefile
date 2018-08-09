@@ -4,7 +4,7 @@ ifndef ROOT
 endif
 
 
-.PHONY : build_dependencies
+.PHONY : build-dependencies
 build_dependencies : $(DEPENDENCIES)
 	@echo "$(DEPENDENCIES)"
 
