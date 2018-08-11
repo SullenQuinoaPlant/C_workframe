@@ -34,10 +34,6 @@ include $(LIB_DIR)/Makefile
 	
 include $(UTEST_DIR)/Makefile
 
-########
-#DEBUG :
-
-include $(DEBUG_DIR)/Makefile
 
 
 ##########

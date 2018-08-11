@@ -22,4 +22,3 @@ endif
 CFLAGS += $(CFLAGS_MORE)
 
 UTEST_DIR := $(ROOT)/unit-tests
-DEBUG_DIR := $(ROOT)/debug
