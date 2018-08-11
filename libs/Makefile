@@ -5,7 +5,7 @@ endif
 
 
 .PHONY : build-dependencies
-build_dependencies : $(DEPENDENCIES)
+build-dependencies : $(DEPENDENCIES)
 	@echo "$(DEPENDENCIES)"
 
 define BUILD_LIB
