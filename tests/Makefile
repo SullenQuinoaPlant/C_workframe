@@ -3,7 +3,7 @@ ifndef ROOT
  include $(ROOT)/Makefile
 endif
 
-TEST_SRCS := $(wildcard $(UTEST_DIR)/*.test.c)
+TEST_SRCS := $(wildcard $(TEST_DIR)/*.test.c)
 TEST_OBJS := $(TEST_SRCS:.c=.o)
 EXECUTION_STAMPS := $(TEST_OBJS:.o=.execution.stamp)
 
@@ -36,7 +36,7 @@ test_prerequisites : cmocka
 cmocka : 
 	@if $(CC) $(CFLAGS_UTEST)\
 		-I $(LIBS_I) -L $(LIBS_L)\
-	 	$(UTEST_DIR)/cmocka/check_install.c\
+	 	$(TEST_DIR)/cmocka/check_install.c\
 		-lcmocka -o test.o\
 		-Wl,-rpath=$$(readlink -e $(LIBS_L))\
 		&& ./test.o .;\
@@ -44,14 +44,14 @@ cmocka :
 		echo "cmocka already installed";\
 	else\
 		echo "installing cmocka";\
-		$(MAKE) -C $(UTEST_DIR)/cmocka/;\
+		$(MAKE) -C $(TEST_DIR)/cmocka/;\
 	fi
 	-@rm ./test.o
 
 
-$(UTEST_DIR)/%.test.o\
+$(TEST_DIR)/%.test.o\
 :\
-$(UTEST_DIR)/%.test.c\
+$(TEST_DIR)/%.test.c\
 $(LIBS_L)/$(LIBNAME).a
 	$(CC) $(CFLAGS_UTEST)\
 		-I $(LIBS_I) -I $(SRC_DIR)\
@@ -63,7 +63,7 @@ $(LIBS_L)/$(LIBNAME).a
 		-Wl,-rpath=$$(readlink -e $(LIBS_L))\
 
 
-%.test.c : $(UTEST_DIR)/cmocka/my_macro_overlay.h
+%.test.c : $(TEST_DIR)/cmocka/my_macro_overlay.h
 	@:
 
 
@@ -71,17 +71,17 @@ $(LIBS_L)/$(LIBNAME).a
 ############
 #RUN TESTS :
 
-.PHONY : unit-tests ut
-unit-tests ut : list_tests build_tests run_tests
+.PHONY : tests
+tests : list_tests build_tests run_tests
 
 .PHONY : run_tests
 run_tests : $(EXECUTION_STAMPS)
 
 %.execution.stamp : %.o
-	-./$*.o "$(UTEST_DIR)" \
+	-./$*.o "$(TEST_DIR)" \
 	&& touch $@
 #argument used to be
-#	"$$(readlink -e $(UTEST_DIR))" \
+#	"$$(readlink -e $(TEST_DIR))" \
 
 
 
@@ -95,8 +95,8 @@ all_unit_tests aut : clean-tests ut
 
 .PHONY : clean-tests
 clean-tests :
-	-rm $(UTEST_DIR)/*.o
-	-rm $(UTEST_DIR)/*.stamp
+	-rm $(TEST_DIR)/*.o
+	-rm $(TEST_DIR)/*.stamp
 
 
 
