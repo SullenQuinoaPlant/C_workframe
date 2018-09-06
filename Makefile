@@ -7,7 +7,7 @@ def : targets
 #VARIABLES :
 
 ifndef ROOT
- ROOT := .
+	ROOT := .
 endif
 
 include $(ROOT)/make_vars.mk
@@ -39,31 +39,33 @@ include $(TEST_DIR)/Makefile
 ##########
 #RELEASE :
 
-RELEASE_DIR = release_$(NAME)
-
 .PHONY : release
-release :
-	if [ -d $(RELEASE_DIR) ];\
-	then rm -rf $(RELEASE_DIR)/;\
-	fi
+release : $(RELEASE_DIR)
+
+.PHONY : $(RELEASE_DIR)
+$(RELEASE_DIR) :
+	-rm -rf $@/;\
 	git clone \
 		--single-branch \
 		-b release \
 		$(GIT_REPO) \
-		$(RELEASE_DIR)
-	cd $(RELEASE_DIR) && git rm -rf *
-	cp auteur $(RELEASE_DIR)/
-	cp -r $(SRC_DIR)/* $(RELEASE_DIR)/
-#the following must override the existing Makefile
-	cp core.mk $(RELEASE_DIR)/Makefile
-	cp make_vars_release.mk $(RELEASE_DIR)/make_vars.mk
+		$@
+	cd $@ && git rm -rf *
+	cp $(ROOT)/auteur $@/
+	mkdir $@/sources
+	cp $(SRCS) $@/sources
+	cp $(INCS) $@/sources
+	mkdir $@/includes
+	mv $@/sources/$(LIBNAME).h $@/includes
+	cp $(ROOT)/targets.mk $@/make_vars.mk
+	cat $(ROOT)/make_vars_release.mk >> $@/make_vars.mk
+	cp $(ROOT)/core.mk $@/Makefile
 	cp $(patsubst %,$(LIBS_I)/%.h,$(DEPENDENCIES)) \
-		$(RELEASE_DIR)/
+		$@/includes
 	cd $(RELEASE_DIR) && \
 		git add * && \
 		git commit -m make_release && \
-		git push origin release
-	
+		git push
 
 ################
 #MISCELLANEOUS :

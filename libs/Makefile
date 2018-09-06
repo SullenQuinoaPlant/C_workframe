@@ -9,19 +9,17 @@ build-dependencies : $(DEPENDENCIES)
 	@echo "$(DEPENDENCIES)"
 
 define BUILD_LIB
-	$(MAKE) -C $@/ 
+	$(MAKE) -C $(LIB_DIR)/$@/ 
 	cp $@/$@.a $(LIBS_L)
-	cp $@/$@.h $(LIBS_I)
-	rm -rf $@
-	touch $(LIB_DIR)/$@
+	cp $@/includes/$@.h $(LIBh_I)
 endef
-	
+
 libft :
 	git clone \
 		--single-branch \
-		-b the_lib https://github.com/SullenQuinoaPlant/Libft.git \
+		-b release https://github.com/SullenQuinoaPlant/Libft.git \
 		--depth 1 \
-		$@/
+		$(LIB_DIR)/$@/
 	$(BUILD_LIB)
 
 
@@ -30,12 +28,12 @@ libmyfloatingpoint :
 		--single-branch \
 		-b release https://github.com/SullenQuinoaPlant/my_floatingpoint.git \
 		--depth 1 \
-		$@/
+		$(LIB_DIR)/$@/
 	$(BUILD_LIB)
 
 
-.PHONY : clean-*
-clean-% :
-	-rm $(LIB_DIR)/$*
-	-rm $(LIBS_I)/$*.h
-	-rm $(LIBS_L)/$*.a
+.PHONY : clean-lib*
+clean-lib% :
+	-rm $(LIB_DIR)/lib$*
+	-rm $(LIBS_I)/lib$*.h
+	-rm $(LIBS_L)/lib$*.a

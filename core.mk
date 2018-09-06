@@ -4,9 +4,12 @@ ifndef ROOT
 endif
 
 
-OBJS := $(patsubst %,$(OBJ_DIR)/%.o,$(TARGETS))
+.PHONY : all
+all : $(NAME)
 
-all : $(OUT_DIR_LIB)/$(LIBNAME).a
+.PHONY : $(NAME)
+$(NAME) : $(OUT_DIR_LIB)/$(NAME).a
+
 
 $(OUT_DIR_LIB)/$(LIBNAME).a : $(OBJ_DIR)/$(NAME).o
 	-ar rcs $@ $<
