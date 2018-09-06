@@ -9,4 +9,3 @@ targets :
 	@ls $(SRC_DIR)/*.c \
 	|sed 's@.*/\([a-z0-9][a-z0-9_]*\)\.c@	\1 \\@' \
 	|sed '$$s@\(.*\) \\@\1@' >> $(ROOT)/targets.mk
-	$(eval include $(SRC_DIR)/targets.mk)
