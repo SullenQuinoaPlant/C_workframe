@@ -14,6 +14,8 @@ $(NAME) : $(OUT_DIR_LIB)/$(NAME).a
 $(OUT_DIR_LIB)/$(LIBNAME).a : $(OBJ_DIR)/$(NAME).o
 	-ar rcs $@ $<
 	cp $(SRC_DIR)/$(NAME).h $(OUT_DIR_H)/$(LIBNAME).h
+	sed -e'13s@ @ LIB@' -e'14s@\( define \)@\1LIB@' -i "" $(OUT_HIR_H)/$(LIBNAME).h
+
 
 $(OBJ_DIR)/$(NAME).o : $(OBJS)
 	ld -r $^ -o $@
