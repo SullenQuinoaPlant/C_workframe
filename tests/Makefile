@@ -100,7 +100,7 @@ clean-tests :
 
 
 
-.PHONY : list_tests
+.PHONY : list-tests
 list_tests :
 	@echo "source dir is : $(SRC_DIR)"
 	@echo "list of test sources:"
