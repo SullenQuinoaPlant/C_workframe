@@ -15,7 +15,7 @@ CFLAGS_UTEST += $(CFLAGS_MORE) #$(CFLAGS) were annoying the hell out of me
 ############
 #BUILD TESTS
 
-.PHONY : build_tests
+.PHONY : build-tests
 build_tests\
 :\
 set_utest_flags def\
