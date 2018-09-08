@@ -11,7 +11,7 @@ build-dependencies : $(DEPENDENCIES)
 define BUILD_LIB
 	$(MAKE) -C $(LIB_DIR)/$@/ 
 	cp $@/$@.a $(LIBS_L)
-	cp $@/includes/$@.h $(LIBh_I)
+	cp $@/includes/$@.h $(LIBS_I)
 endef
 
 libft :
