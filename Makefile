@@ -7,7 +7,7 @@ def : targets
 #VARIABLES :
 
 ifndef ROOT
-	ROOT := .
+ ROOT := .
 endif
 
 include $(ROOT)/make_vars.mk
