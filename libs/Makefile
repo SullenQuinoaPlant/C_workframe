@@ -1,6 +1,6 @@
 ifndef ROOT
-	ROOT = ..
-	include $(ROOT)/Makefile
+ ROOT = ..
+ include $(ROOT)/Makefile
 endif
 
 
