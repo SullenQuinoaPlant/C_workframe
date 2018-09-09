@@ -58,7 +58,7 @@ $(RELEASE_DIR) :
 	mkdir $@/includes
 	mv $@/sources/$(LIBNAME).h $@/includes
 	cp $(ROOT)/targets.mk $@/make_vars.mk
-	cat $(ROOT)/make_vars_release.mk >> $@/make_vars.mk
+	cat $(ROOT)/release_vars.mk >> $@/make_vars.mk
 	cp $(ROOT)/core.mk $@/Makefile
 	cp $(patsubst %,$(LIBS_I)/%.h,$(DEPENDENCIES)) \
 		$@/includes
