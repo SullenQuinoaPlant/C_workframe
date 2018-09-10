@@ -37,3 +37,6 @@ clean-lib% :
 	-rm -rf $(LIB_DIR)/lib$*
 	-rm $(LIBS_I)/lib$*.h
 	-rm $(LIBS_L)/lib$*.a
+
+.PHONY : re-lib*
+re-libr% : clean-lib% lib%
