@@ -54,9 +54,8 @@ $(RELEASE_DIR) :
 	cp $(ROOT)/auteur $@/
 	mkdir $@/sources
 	cp $(SRCS) $@/sources
-	cp $(INCS) $@/sources
 	mkdir $@/includes
-	mv $@/sources/$(LIBNAME).h $@/includes
+	cp $(INCS) $@/includes
 	cp $(ROOT)/targets.mk $@/make_vars.mk
 	cat $(ROOT)/release_vars.mk >> $@/make_vars.mk
 	cp $(ROOT)/core.mk $@/Makefile
