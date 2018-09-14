@@ -8,6 +8,12 @@ endif
 build-dependencies : $(DEPENDENCIES)
 	@echo "$(DEPENDENCIES)"
 
+.PHONY : clean-dependencies
+clean-dependencies : $(patsubst %,clean-%,$(DEPENDENCIES))
+
+.PHONY : re-dependencies
+re-dependencies : clean-dependencies build-dependencies
+
 define BUILD_LIB
 	$(MAKE) -C $(LIB_DIR)/$@/ 
 	cp $@/$@.a $(LIBS_L)
