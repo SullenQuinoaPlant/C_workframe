@@ -9,4 +9,4 @@ install:
  - . .travis/install_cmocka.sh
 script:
  - make
- - make tests
+ - make tests_all

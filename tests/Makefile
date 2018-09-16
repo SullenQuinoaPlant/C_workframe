@@ -7,72 +7,60 @@ TEST_SRCS := $(wildcard $(TEST_DIR)/*.test.c)
 TEST_OBJS := $(TEST_SRCS:.c=.o)
 EXECUTION_STAMPS := $(TEST_OBJS:.o=.execution.stamp)
 
-CFLAGS_UTEST = -fno-builtin -g
-CFLAGS_UTEST += $(CFLAGS_MORE) #$(CFLAGS) were annoying the hell out of me
+CFLAGS_TEST = -fno-builtin -g
+CFLAGS_TEST += $(CFLAGS_MORE) #$(CFLAGS) were annoying the hell out of me
+
+TEST_DEPENDENCIES = libcmocka
 
 
+.PHONY : tests_all
+tests_all :\
+build_test_dependencies\
+clean_tests\
+build_tests\
+run_tests
 
 ############
 #BUILD TESTS
 
-.PHONY : build-tests
+.PHONY : build_test_dependencies
+build_test_dependencies : $(TEST_DEPENDENCIES)
+
+.PHONY : libcmocka
+libcmocka : $(LIB_DIR)/libcmocka
+	$(MAKE) -C $(TEST_DIR)/cmocka
+
+.PHONY : build_tests
 build_tests\
 :\
-set_utest_flags def\
-test_prerequisites\
+set_test_flags\
+def\
 $(TEST_OBJS)
 
-
-.PHONY : set_utest_flags
-set_utest_flags :
-	$(eval CFLAGS += $(CFLAGS_UTEST))
-
-
-.PHONY : test_prerequisites
-test_prerequisites : cmocka
-
-
-.PHONY : cmocka
-cmocka : 
-	@if $(CC) $(CFLAGS_UTEST)\
-		-I $(LIBS_I) -L $(LIBS_L)\
-	 	$(TEST_DIR)/cmocka/check_install.c\
-		-lcmocka -o test.o\
-		-Wl,-rpath=$$(readlink -e $(LIBS_L))\
-		&& ./test.o .;\
-	then\
-		echo "cmocka already installed";\
-	else\
-		echo "installing cmocka";\
-		$(MAKE) -C $(TEST_DIR)/cmocka/;\
-	fi
-	-@rm ./test.o
+.PHONY : set_test_flags
+set_test_flags :
+	$(eval CFLAGS += $(CFLAGS_TEST))
 
 
 $(TEST_DIR)/%.test.o\
 :\
 $(TEST_DIR)/%.test.c\
 $(LIBS_L)/$(LIBNAME).a
-	$(CC) $(CFLAGS_UTEST)\
+	$(CC) $(CFLAGS_TEST)\
 		-I $(LIBS_I) -I $(SRC_DIR)\
 		$<\
 		-L $(LIBS_L)\
-		-lcmocka\
+		-lcmocka_shared\
 		-l$(NAME) -lmyfloatingpoint -lft\
 		-o $@\
 		-Wl,-rpath=$$(readlink -e $(LIBS_L))\
-
-
-%.test.c : $(TEST_DIR)/cmocka/my_macro_overlay.h
-	@:
-
 
 
 ############
 #RUN TESTS :
 
 .PHONY : tests
-tests : list_tests build_tests run_tests
+tests : list_tests run_tests
 
 .PHONY : run_tests
 run_tests : $(EXECUTION_STAMPS)
@@ -80,25 +68,15 @@ run_tests : $(EXECUTION_STAMPS)
 %.execution.stamp : %.o
 	-./$*.o "$(TEST_DIR)" \
 	&& touch $@
-#argument used to be
-#	"$$(readlink -e $(TEST_DIR))" \
-
 
 
 ###############
 #MISCELLANEOUS:
 
-.PHONY : all_unit_tests aut
-all_unit_tests aut : clean-tests ut
-
-
-
-.PHONY : clean-tests
-clean-tests :
+.PHONY : clean_tests
+clean_tests :
 	-rm $(TEST_DIR)/*.o
 	-rm $(TEST_DIR)/*.stamp
-
-
 
 .PHONY : list-tests
 list_tests :
