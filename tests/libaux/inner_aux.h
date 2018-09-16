@@ -1,5 +1,5 @@
-#ifndef AUX_H
-# define AUX_H
+#ifndef INNER_AUX_H
+# define INNER_AUX_H
 
 # include "aux.h"
 
