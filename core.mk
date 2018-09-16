@@ -5,19 +5,25 @@ endif
 
 
 .PHONY : all
-all : $(NAME)
+all : $(NAME) header
 
 .PHONY : $(NAME)
-$(NAME) : $(OUT_DIR_LIB)/$(NAME).a
+$(NAME) : $(OUT_DIR_LIB)/$(LIBNAME).a
 
-$(OUT_DIR_LIB)/$(LIBNAME).a : $(OBJ_DIR)/$(NAME).o
+.PHONY : header
+header : $(OUT_DIR_H)/$(LIBNAME).h
+
+$(OUT_DIR_H)/$(LIBNAME).h : $(INC_DIR)/$(NAME).h 
+	sed \
+		-e'4s@\($(NAME)\.h\)   @lib\1@' \
+		-e'13s@ @ LIB@' \
+		-e'14s@\( define \)@\1LIB@' \
+		$(INC_DIR)/$(NAME).h > \
+		$(OUT_DIR_H)/$(LIBNAME).h
+
+$(OUT_DIR_LIB)/$(LIBNAME).a : $(OBJS)
 	-ar rcs $@ $^
-	cp $(SRC_DIR)/$(NAME).h $(OUT_DIR_H)/$(LIBNAME).h
-	sed -e'13s@ @ LIB@' -e'14s@\( define \)@\1LIB@' -i "" $(OUT_HIR_H)/$(LIBNAME).h
 
-
-$(OBJ_DIR)/$(NAME).o : $(OBJS)
-	ld -r $^ -o $@
 
 #specific file dependencies:
 
@@ -32,7 +38,6 @@ $(OBJ_DIR)/%.o : $(SRC_DIR)/%.c
 .PHONY : re fclean clean all
 clean :
 	-rm $(OBJS)
-	-rm $(OBJ_DIR)/$(NAME).o
 
 fclean : clean
 	-rm $(OUT_DIR_LIB)/$(LIBNAME).a

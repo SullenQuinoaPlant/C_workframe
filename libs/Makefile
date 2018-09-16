@@ -1,12 +1,18 @@
 ifndef ROOT
-	ROOT = ..
-	include $(ROOT)/Makefile
+ ROOT = ..
+ include $(ROOT)/Makefile
 endif
 
 
 .PHONY : build-dependencies
 build-dependencies : $(DEPENDENCIES)
 	@echo "$(DEPENDENCIES)"
+
+.PHONY : clean-dependencies
+clean-dependencies : $(patsubst %,clean-%,$(DEPENDENCIES))
+
+.PHONY : re-dependencies
+re-dependencies : clean-dependencies build-dependencies
 
 define BUILD_LIB
 	$(MAKE) -C $(LIB_DIR)/$@/ 
@@ -34,6 +40,9 @@ libmyfloatingpoint :
 
 .PHONY : clean-lib*
 clean-lib% :
-	-rm $(LIB_DIR)/lib$*
+	-rm -rf $(LIB_DIR)/lib$*
 	-rm $(LIBS_I)/lib$*.h
 	-rm $(LIBS_L)/lib$*.a
+
+.PHONY : re-lib*
+re-libr% : clean-lib% lib%
