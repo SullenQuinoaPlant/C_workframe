@@ -10,7 +10,7 @@ EXECUTION_STAMPS := $(TEST_OBJS:.o=.execution.stamp)
 CFLAGS_TEST = -fno-builtin -g
 CFLAGS_TEST += $(CFLAGS_MORE) #$(CFLAGS) were annoying the hell out of me
 
-TEST_DEPENDENCIES = libcmocka
+TEST_DEPENDENCIES = libcmocka_shared
 
 
 .PHONY : tests_all
@@ -26,8 +26,8 @@ run_tests
 .PHONY : build_test_dependencies
 build_test_dependencies : $(TEST_DEPENDENCIES)
 
-.PHONY : libcmocka
-libcmocka : $(LIB_DIR)/libcmocka
+.PHONY : libcmocka_shared
+libcmocka_shared : $(LIB_DIR)/libcmocka_shared
 	$(MAKE) -C $(TEST_DIR)/cmocka
 
 .PHONY : build_tests
@@ -60,7 +60,7 @@ $(LIBS_L)/$(LIBNAME).a
 #RUN TESTS :
 
 .PHONY : tests
-tests : list_tests run_tests
+tests : list_tests build_tests run_tests
 
 .PHONY : run_tests
 run_tests : $(EXECUTION_STAMPS)

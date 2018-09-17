@@ -27,4 +27,4 @@ endif
 CFLAGS += $(CFLAGS_MORE)
 
 TEST_DIR := $(ROOT)/tests
-RELEAS_DIR := $(ROOT)/release
+RELEASE_DIR := $(ROOT)/release
