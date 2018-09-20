@@ -119,3 +119,11 @@ list_tests :
 	@echo $(TEST_SRCS)
 	@echo "list of test objects:"
 	@echo $(TEST_OBJS)
+
+.PHONY : osx_ld
+osx_ld :
+	sed -i "" -e's@-Wl,-rpath=@-Wl,-rpath,@' $(TEST_DIR)/Makefile
+
+.PHONY : gnu_ld
+gnu_ld :
+	sed -i -e's@-Wl,-rpath,@-Wl,-rpath=@' $(TEST_DIR)/Makefile
