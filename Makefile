@@ -52,7 +52,6 @@ $(RELEASE_DIR) :
 	mkdir $@/includes
 	cp $(INCS) $@/includes
 	cp $(patsubst %,$(LIBS_I)/%.h,$(DEPENDENCIES)) $@/includes
-	cp $(ROOT)/core.mk $@/Makefile
 	cat $(ROOT)/targets.mk $(ROOT)/release_vars.mk $(ROOT)/core.mk >\
 		$@/Makefile
 	cd $@ && \

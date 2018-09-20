@@ -1,6 +1,6 @@
 NAME = myrbtree
 LIBNAME = lib$(NAME)
-GIT_REPO = https://github.com/SullenQuinoaPlant/my_rbtree.git
+GIT_REPO = https://github.com/SullenQuinoaPlant/.git
 
 CALL_DIR := $(shell pwd)
 SRC_DIR := $(ROOT)/sources

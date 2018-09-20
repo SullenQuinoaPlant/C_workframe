@@ -10,7 +10,7 @@ EXECUTION_STAMPS := $(TEST_OBJS:.o=.execution.stamp)
 CFLAGS_TEST = -fno-builtin -g
 CFLAGS_TEST += $(CFLAGS_MORE)
 
-TEST_DEPENDENCIES = libaux libcmocka_shared libmystupidmath
+TEST_DEPENDENCIES = libaux libcmocka_shared
 
 
 .PHONY : tests_all
@@ -94,7 +94,7 @@ $(LIBS_L)/$(LIBNAME).a
 #RUN TESTS :
 
 .PHONY : tests
-tests : list_tests build_tests run_tests
+tests : list_tests test_prerequisites build_tests run_tests
 
 .PHONY : run_tests
 run_tests : $(EXECUTION_STAMPS)
