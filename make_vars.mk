@@ -1,4 +1,4 @@
-NAME = myrbtree
+NAME = CHANGE_THIS
 LIBNAME = lib$(NAME)
 GIT_REPO = https://github.com/SullenQuinoaPlant/.git
 
