@@ -10,7 +10,8 @@ EXECUTION_STAMPS := $(TEST_OBJS:.o=.execution.stamp)
 CFLAGS_TEST = -fno-builtin -g
 CFLAGS_TEST += $(CFLAGS_MORE)
 
-TEST_DEPENDENCIES = libaux libcmocka_shared
+CMOCKA_LIBNAME = libcmocka
+TEST_DEPENDENCIES = libaux $(CMOCKA_LIBNAME)
 
 
 .PHONY : tests_all
@@ -27,9 +28,9 @@ run_tests
 .PHONY : build_test_dependencies
 build_test_dependencies : $(TEST_DEPENDENCIES)
 
-.PHONY : libcmocka_shared
-libcmocka_shared :
-	$(MAKE) -C $(TEST_DIR)/cmocka
+.PHONY : $(CMOCKA_LIBNAME)
+$(CMOCKA_LIBNAME) :
+	$(MAKE) -C $(TEST_DIR)/cmocka  CMOCKA_LIBNAME=$(CMOCKA_LIBNAME)
 
 .PHONY : build_tests
 build_tests\
@@ -49,7 +50,8 @@ cmocka :
 	@if $(CC) $(CFLAGS_TEST)\
 		-I $(LIBS_I) -L $(LIBS_L)\
 	 	$(TEST_DIR)/cmocka/check_install.c\
-		-lcmocka -o test.o\
+		$(patsubst lib%,-l%,$(CMOCKA_LIBNAME))\
+		-o test.o\
 		-Wl,-rpath=$(LIBS_L)\
 		&& ./test.o .;\
 	then\
